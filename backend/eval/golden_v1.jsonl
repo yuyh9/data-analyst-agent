@@ -1,0 +1,25 @@
+{"id": "q01", "input": "How many unique customers are in the database?", "expected_facts": ["99,441", "99441"], "forbidden_facts": ["error"], "tags": ["single-table", "count"]}
+{"id": "q02", "input": "What is the most common payment type?", "expected_facts": ["credit card", "credit_card"], "forbidden_facts": ["boleto", "error"], "tags": ["single-table", "aggregation"]}
+{"id": "q03", "input": "Which state has the most customers?", "expected_facts": ["SP"], "forbidden_facts": ["RJ", "MG", "error"], "tags": ["single-table", "aggregation"]}
+{"id": "q04", "input": "How many product categories are there?", "expected_facts": ["73", "71"], "forbidden_facts": ["error"], "tags": ["single-table", "count"]}
+{"id": "q05", "input": "What is the average review score?", "expected_facts": ["4.09", "4.0"], "forbidden_facts": ["error"], "tags": ["single-table", "aggregation"]}
+{"id": "q06", "input": "How many sellers are in the database?", "expected_facts": ["3,095", "3095"], "forbidden_facts": ["error"], "tags": ["single-table", "count"]}
+{"id": "q07", "input": "What is the total number of orders?", "expected_facts": ["99,441", "99441"], "forbidden_facts": ["error"], "tags": ["single-table", "count"]}
+{"id": "q08", "input": "Which product category has the most orders?", "expected_facts": ["cama_mesa_banho", "bed_bath_table", "Cama", "cama"], "forbidden_facts": ["error"], "tags": ["multi-table", "join"]}
+{"id": "q09", "input": "What percentage of orders were delivered successfully?", "expected_facts": ["96", "97", "96.4", "96.5", "96.47"], "forbidden_facts": ["error"], "tags": ["single-table", "calculation"]}
+{"id": "q10", "input": "Which state has the most orders?", "expected_facts": ["SP"], "forbidden_facts": ["RJ", "MG", "error"], "tags": ["multi-table", "join"]}
+{"id": "q11", "input": "What is the average delivery time in days?", "expected_facts": ["12", "12.0", "12.09"], "forbidden_facts": ["error"], "tags": ["single-table", "calculation"]}
+{"id": "q12", "input": "Which seller has the most orders?", "expected_facts": [], "forbidden_facts": ["error"], "tags": ["multi-table", "join"]}
+{"id": "q13", "input": "What is the most popular product category by revenue?", "expected_facts": [], "forbidden_facts": ["error"], "tags": ["multi-table", "join", "aggregation"]}
+{"id": "q14", "input": "How many orders were placed in 2017?", "expected_facts": ["45,101", "45101"], "forbidden_facts": ["error"], "tags": ["single-table", "filter"]}
+{"id": "q15", "input": "What is the average number of installments for credit card payments?", "expected_facts": ["3", "4", "5", "6"], "forbidden_facts": ["100", "error"], "tags": ["single-table", "filter", "aggregation"]}
+{"id": "q16", "input": "Which month in 2017 had the highest number of orders?", "expected_facts": ["November", "november", "11"], "forbidden_facts": ["January", "error"], "tags": ["single-table", "time-series"]}
+{"id": "q17", "input": "What is the average freight value per order?", "expected_facts": ["16", "16.1", "16.11", "19", "19.9", "19.99", "22", "22.8", "22.82"], "forbidden_facts": ["error"], "tags": ["single-table", "aggregation"]}
+{"id": "q18", "input": "How many orders have a review score of 5?", "expected_facts": ["57,328", "57328"], "forbidden_facts": ["error"], "tags": ["single-table", "filter"]}
+{"id": "q19", "input": "Which city has the most customers?", "expected_facts": ["sao paulo", "São Paulo", "SAO PAULO"], "forbidden_facts": ["rio", "error"], "tags": ["single-table", "aggregation"]}
+{"id": "q20", "input": "What is the total revenue in BRL?", "expected_facts": ["R$", "BRL", "reais"], "forbidden_facts": ["error"], "tags": ["multi-table", "aggregation"]}
+{"id": "q21", "input": "What is the total revenue converted to USD?", "expected_facts": ["USD", "$", "3,"], "forbidden_facts": ["error"], "tags": ["currency", "mcp-exchange-rate"]}
+{"id": "q22", "input": "Convert total 2017 revenue to EUR", "expected_facts": ["EUR", "euro", "€"], "forbidden_facts": ["error"], "tags": ["currency", "mcp-exchange-rate"]}
+{"id": "q23", "input": "Which state has the most orders per capita?", "expected_facts": ["SP", "DF", "RJ", "MG", "PR"], "forbidden_facts": ["error"], "tags": ["per-capita", "mcp-ibge"]}
+{"id": "q24", "input": "Show me the top 5 sellers by total revenue", "expected_facts": [], "forbidden_facts": ["error"], "tags": ["multi-table", "join", "top-n"]}
+{"id": "q25", "input": "What is the average order value in USD?", "expected_facts": ["USD", "$", "30", "31", "32", "33", "34", "35"], "forbidden_facts": ["error"], "tags": ["currency", "mcp-exchange-rate"]}

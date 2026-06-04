@@ -1,0 +1,210 @@
+{
+  "results_file": "baseline_v2",
+  "average_score": 5.0,
+  "high_quality_count": 25,
+  "total": 25,
+  "scores": [
+    5,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5
+  ],
+  "cases": [
+    {
+      "id": "q01",
+      "input": "How many unique customers are in the database?",
+      "answer": "There are 99,441 unique customers in the database.",
+      "llm_score": 5,
+      "llm_reason": "The answer provides an exact number of unique customers with clear context."
+    },
+    {
+      "id": "q02",
+      "input": "What is the most common payment type?",
+      "answer": "The most common payment type is **credit card**, with a total of **76,795** transactions.",
+      "llm_score": 5,
+      "llm_reason": "The answer provides a specific payment type and an exact number of transactions, offering clear context."
+    },
+    {
+      "id": "q03",
+      "input": "Which state has the most customers?",
+      "answer": "The state with the most customers is S\u00e3o Paulo (SP), with a total of 41,746 customers.",
+      "llm_score": 5,
+      "llm_reason": "The answer provides a specific state name, an exact number of customers, and clear context."
+    },
+    {
+      "id": "q04",
+      "input": "How many product categories are there?",
+      "answer": "There are 73 distinct product categories in the dataset.",
+      "llm_score": 5,
+      "llm_reason": "The answer provides an exact number of product categories with clear context."
+    },
+    {
+      "id": "q05",
+      "input": "What is the average review score?",
+      "answer": "The average review score is approximately **4.09**.",
+      "llm_score": 5,
+      "llm_reason": "The answer provides an exact number for the average review score with clear specificity."
+    },
+    {
+      "id": "q06",
+      "input": "How many sellers are in the database?",
+      "answer": "There are a total of **3,095** sellers in the database.",
+      "llm_score": 5,
+      "llm_reason": "The answer provides an exact number of sellers in the database with clear context."
+    },
+    {
+      "id": "q07",
+      "input": "What is the total number of orders?",
+      "answer": "The total number of orders is 99,441.",
+      "llm_score": 5,
+      "llm_reason": "The answer provides an exact number with clear context regarding the total number of orders."
+    },
+    {
+      "id": "q08",
+      "input": "Which product category has the most orders?",
+      "answer": "The product category with the most orders is **Cama, Mesa e Banho** (Bedding, Tableware, and Bath), with a total of **11,115 orders**.",
+      "llm_score": 5,
+      "llm_reason": "The answer provides a specific product category name and an exact number of orders, offering clear context."
+    },
+    {
+      "id": "q09",
+      "input": "What percentage of orders were delivered successfully?",
+      "answer": "Out of a total of 99,441 orders, 96,478 were delivered successfully. \n\nTo calculate the percentage of successfully delivered orders:\n\n\\[\n\\text{Percentage} = \\left( \\frac{\\text{delivered orders}}{\\text",
+      "llm_score": 5,
+      "llm_reason": "The answer provides exact numbers for total and successfully delivered orders, along with a clear calculation of the percentage."
+    },
+    {
+      "id": "q10",
+      "input": "Which state has the most orders?",
+      "answer": "The state with the most orders is S\u00e3o Paulo (SP), with a total of 41,746 orders.",
+      "llm_score": 5,
+      "llm_reason": "The answer provides a specific state name, an abbreviation, and an exact number of orders, offering clear context."
+    },
+    {
+      "id": "q11",
+      "input": "What is the average delivery time in days?",
+      "answer": "The average delivery time is approximately **12.13 days**.",
+      "llm_score": 5,
+      "llm_reason": "The answer provides an exact number for the average delivery time with clear context."
+    },
+    {
+      "id": "q12",
+      "input": "Which seller has the most orders?",
+      "answer": "The seller with the most orders is identified by the seller ID **6560211a19b47992c3666cc44a7e94c0**, with a total of **2,033 orders**.",
+      "llm_score": 5,
+      "llm_reason": "The answer provides an exact seller ID and a specific number of orders, offering clear context."
+    },
+    {
+      "id": "q13",
+      "input": "What is the most popular product category by revenue?",
+      "answer": "The most popular product category by revenue is **Health & Beauty**, with a total revenue of **BRL 1,258,681.34**.",
+      "llm_score": 5,
+      "llm_reason": "The answer provides a specific product category and an exact revenue figure with clear context."
+    },
+    {
+      "id": "q14",
+      "input": "How many orders were placed in 2017?",
+      "answer": "A total of **45,101 orders** were placed in 2017.",
+      "llm_score": 5,
+      "llm_reason": "The answer provides an exact number of orders placed in 2017 with clear context."
+    },
+    {
+      "id": "q15",
+      "input": "What is the average number of installments for credit card payments?",
+      "answer": "The average number of installments for credit card payments is approximately **3.51**.",
+      "llm_score": 5,
+      "llm_reason": "The answer provides an exact number, 3.51, which is specific and clear."
+    },
+    {
+      "id": "q16",
+      "input": "Which month in 2017 had the highest number of orders?",
+      "answer": "The month in 2017 with the highest number of orders was November, with a total of 7,544 orders.",
+      "llm_score": 5,
+      "llm_reason": "The answer provides a specific month and an exact number of orders, giving clear context."
+    },
+    {
+      "id": "q17",
+      "input": "What is the average freight value per order?",
+      "answer": "The average freight value per order is approximately **R$ 15.10**.",
+      "llm_score": 5,
+      "llm_reason": "The answer provides an exact number for the average freight value per order with clear context."
+    },
+    {
+      "id": "q18",
+      "input": "How many orders have a review score of 5?",
+      "answer": "There are a total of **57,328 orders** that have a review score of 5.",
+      "llm_score": 5,
+      "llm_reason": "The answer provides an exact number of orders with a review score of 5, fully addressing the question with clear specificity."
+    },
+    {
+      "id": "q19",
+      "input": "Which city has the most customers?",
+      "answer": "The city with the most customers is S\u00e3o Paulo, with a total of 15,540 customers.",
+      "llm_score": 5,
+      "llm_reason": "The answer provides a specific city name and an exact number of customers, offering clear context."
+    },
+    {
+      "id": "q20",
+      "input": "What is the total revenue in BRL?",
+      "answer": "The total revenue is approximately **BRL 16,008,872.12**.",
+      "llm_score": 5,
+      "llm_reason": "The answer provides an exact revenue figure in BRL with clear specificity."
+    },
+    {
+      "id": "q21",
+      "input": "What is the total revenue converted to USD?",
+      "answer": "The total revenue converted to USD is approximately **$3,169,756.68**.",
+      "llm_score": 5,
+      "llm_reason": "The answer provides an exact number for the total revenue in USD with clear context."
+    },
+    {
+      "id": "q22",
+      "input": "Convert total 2017 revenue to EUR",
+      "answer": "The total revenue for the year 2017 was approximately **1,230,724.49 EUR**. This conversion is based on the current exchange rate of 1 BRL = 0.17 EUR.",
+      "llm_score": 5,
+      "llm_reason": "The answer provides an exact revenue figure in EUR along with the specific exchange rate used for conversion."
+    },
+    {
+      "id": "q23",
+      "input": "Which state has the most orders per capita?",
+      "answer": "To find the state with the most orders per capita, we can calculate the orders per capita for each state using the order counts and the populations obtained.\n\nHere are the order counts and populations",
+      "llm_score": 5,
+      "llm_reason": "The answer provides exact numbers for order counts and populations, clearly identifying S\u00e3o Paulo as the state with the highest orders per capita."
+    },
+    {
+      "id": "q24",
+      "input": "Show me the top 5 sellers by total revenue",
+      "answer": "The top 5 sellers by total revenue are as follows:\n\n1. **Seller ID:** 7c67e1448b00f6e969d365cea6b010ab - **Total Revenue:** BRL 507,166.91\n2. **Seller ID:** 1025f0e2d44d7041d6cf58b6550e0bfa - **Total ",
+      "llm_score": 5,
+      "llm_reason": "The answer provides exact seller IDs and total revenue figures with clear context."
+    },
+    {
+      "id": "q25",
+      "input": "What is the average order value in USD?",
+      "answer": "The average order value is approximately **$30.51 USD**.",
+      "llm_score": 5,
+      "llm_reason": "The answer provides an exact number for the average order value with clear context."
+    }
+  ]
+}

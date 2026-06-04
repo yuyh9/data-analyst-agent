@@ -1,0 +1,166 @@
+{
+  "manual_recall": 1.0,
+  "ragas_context_recall": 0.1,
+  "cases": [
+    {
+      "question": "Which product category has the most orders?",
+      "required": [
+        "olist_order_items",
+        "olist_products"
+      ],
+      "retrieved": [
+        "olist_order_items",
+        "olist_orders",
+        "olist_products"
+      ],
+      "hits": [
+        "olist_order_items",
+        "olist_products"
+      ],
+      "recall": 1.0
+    },
+    {
+      "question": "What is the average review score per state?",
+      "required": [
+        "olist_order_reviews",
+        "olist_customers"
+      ],
+      "retrieved": [
+        "olist_order_reviews",
+        "olist_sellers",
+        "olist_customers"
+      ],
+      "hits": [
+        "olist_order_reviews",
+        "olist_customers"
+      ],
+      "recall": 1.0
+    },
+    {
+      "question": "Which payment type is most common?",
+      "required": [
+        "olist_order_payments"
+      ],
+      "retrieved": [
+        "olist_order_payments",
+        "olist_orders",
+        "olist_order_items"
+      ],
+      "hits": [
+        "olist_order_payments"
+      ],
+      "recall": 1.0
+    },
+    {
+      "question": "Top 5 sellers by total revenue",
+      "required": [
+        "olist_order_items",
+        "olist_sellers"
+      ],
+      "retrieved": [
+        "olist_sellers",
+        "olist_order_items",
+        "olist_orders"
+      ],
+      "hits": [
+        "olist_order_items",
+        "olist_sellers"
+      ],
+      "recall": 1.0
+    },
+    {
+      "question": "How many orders were delivered late?",
+      "required": [
+        "olist_orders"
+      ],
+      "retrieved": [
+        "olist_orders",
+        "olist_order_items",
+        "olist_order_payments"
+      ],
+      "hits": [
+        "olist_orders"
+      ],
+      "recall": 1.0
+    },
+    {
+      "question": "Average freight cost by product category",
+      "required": [
+        "olist_order_items",
+        "olist_products"
+      ],
+      "retrieved": [
+        "olist_products",
+        "olist_order_items",
+        "product_category_name_translation"
+      ],
+      "hits": [
+        "olist_order_items",
+        "olist_products"
+      ],
+      "recall": 1.0
+    },
+    {
+      "question": "Which city has the most sellers?",
+      "required": [
+        "olist_sellers"
+      ],
+      "retrieved": [
+        "olist_sellers",
+        "olist_order_items",
+        "olist_customers"
+      ],
+      "hits": [
+        "olist_sellers"
+      ],
+      "recall": 1.0
+    },
+    {
+      "question": "Monthly order count for 2017",
+      "required": [
+        "olist_orders"
+      ],
+      "retrieved": [
+        "olist_orders",
+        "olist_order_items",
+        "olist_order_payments"
+      ],
+      "hits": [
+        "olist_orders"
+      ],
+      "recall": 1.0
+    },
+    {
+      "question": "Average installments for credit card payments",
+      "required": [
+        "olist_order_payments"
+      ],
+      "retrieved": [
+        "olist_order_payments",
+        "olist_orders",
+        "olist_order_items"
+      ],
+      "hits": [
+        "olist_order_payments"
+      ],
+      "recall": 1.0
+    },
+    {
+      "question": "Which customers spent the most total?",
+      "required": [
+        "olist_customers",
+        "olist_order_payments"
+      ],
+      "retrieved": [
+        "olist_customers",
+        "olist_orders",
+        "olist_order_payments"
+      ],
+      "hits": [
+        "olist_customers",
+        "olist_order_payments"
+      ],
+      "recall": 1.0
+    }
+  ]
+}

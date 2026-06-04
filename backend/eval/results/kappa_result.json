@@ -1,0 +1,30 @@
+{
+  "judge_1": "gpt-4o-mini",
+  "judge_2": "gpt-4o",
+  "mini_scores": [
+    5,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5
+  ],
+  "gpt4o_scores": [
+    5,
+    5,
+    5,
+    5,
+    4,
+    5,
+    4,
+    5,
+    5,
+    5
+  ],
+  "kappa": 1.0,
+  "interpretation": "Almost perfect agreement"
+}

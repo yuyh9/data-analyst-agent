@@ -1,0 +1,643 @@
+{
+  "experiment": "baseline_v2",
+  "score": 100.0,
+  "passed": 25,
+  "total": 25,
+  "tag_stats": {
+    "single-table": {
+      "passed": 15,
+      "total": 15
+    },
+    "count": {
+      "passed": 4,
+      "total": 4
+    },
+    "aggregation": {
+      "passed": 8,
+      "total": 8
+    },
+    "multi-table": {
+      "passed": 6,
+      "total": 6
+    },
+    "join": {
+      "passed": 5,
+      "total": 5
+    },
+    "calculation": {
+      "passed": 2,
+      "total": 2
+    },
+    "filter": {
+      "passed": 3,
+      "total": 3
+    },
+    "time-series": {
+      "passed": 1,
+      "total": 1
+    },
+    "currency": {
+      "passed": 3,
+      "total": 3
+    },
+    "mcp-exchange-rate": {
+      "passed": 3,
+      "total": 3
+    },
+    "per-capita": {
+      "passed": 1,
+      "total": 1
+    },
+    "mcp-ibge": {
+      "passed": 1,
+      "total": 1
+    },
+    "top-n": {
+      "passed": 1,
+      "total": 1
+    }
+  },
+  "cases": [
+    {
+      "id": "q01",
+      "input": "How many unique customers are in the database?",
+      "tags": [
+        "single-table",
+        "count"
+      ],
+      "answer": "There are 99,441 unique customers in the database.",
+      "passed": true,
+      "expected_hits": [
+        "99,441"
+      ],
+      "expected_misses": [
+        "99441"
+      ],
+      "forbidden_hits": [],
+      "chart_filepath": null,
+      "tables_used": [
+        "olist_customers",
+        "olist_orders",
+        "olist_order_items"
+      ]
+    },
+    {
+      "id": "q02",
+      "input": "What is the most common payment type?",
+      "tags": [
+        "single-table",
+        "aggregation"
+      ],
+      "answer": "The most common payment type is **credit card**, with a total of **76,795** transactions.",
+      "passed": true,
+      "expected_hits": [
+        "credit card"
+      ],
+      "expected_misses": [
+        "credit_card"
+      ],
+      "forbidden_hits": [],
+      "chart_filepath": null,
+      "tables_used": [
+        "olist_order_payments",
+        "olist_orders",
+        "olist_order_items"
+      ]
+    },
+    {
+      "id": "q03",
+      "input": "Which state has the most customers?",
+      "tags": [
+        "single-table",
+        "aggregation"
+      ],
+      "answer": "The state with the most customers is S\u00e3o Paulo (SP), with a total of 41,746 customers.",
+      "passed": true,
+      "expected_hits": [
+        "SP"
+      ],
+      "expected_misses": [],
+      "forbidden_hits": [],
+      "chart_filepath": null,
+      "tables_used": [
+        "olist_customers",
+        "olist_orders",
+        "olist_sellers"
+      ]
+    },
+    {
+      "id": "q04",
+      "input": "How many product categories are there?",
+      "tags": [
+        "single-table",
+        "count"
+      ],
+      "answer": "There are 73 distinct product categories in the dataset.",
+      "passed": true,
+      "expected_hits": [
+        "73"
+      ],
+      "expected_misses": [
+        "71"
+      ],
+      "forbidden_hits": [],
+      "chart_filepath": null,
+      "tables_used": [
+        "product_category_name_translation",
+        "olist_products",
+        "olist_order_items"
+      ]
+    },
+    {
+      "id": "q05",
+      "input": "What is the average review score?",
+      "tags": [
+        "single-table",
+        "aggregation"
+      ],
+      "answer": "The average review score is approximately **4.09**.",
+      "passed": true,
+      "expected_hits": [
+        "4.09",
+        "4.0"
+      ],
+      "expected_misses": [],
+      "forbidden_hits": [],
+      "chart_filepath": null,
+      "tables_used": [
+        "olist_order_reviews",
+        "olist_products",
+        "olist_sellers"
+      ]
+    },
+    {
+      "id": "q06",
+      "input": "How many sellers are in the database?",
+      "tags": [
+        "single-table",
+        "count"
+      ],
+      "answer": "There are a total of **3,095** sellers in the database.",
+      "passed": true,
+      "expected_hits": [
+        "3,095"
+      ],
+      "expected_misses": [
+        "3095"
+      ],
+      "forbidden_hits": [],
+      "chart_filepath": null,
+      "tables_used": [
+        "olist_sellers",
+        "olist_order_items",
+        "olist_customers"
+      ]
+    },
+    {
+      "id": "q07",
+      "input": "What is the total number of orders?",
+      "tags": [
+        "single-table",
+        "count"
+      ],
+      "answer": "The total number of orders is 99,441.",
+      "passed": true,
+      "expected_hits": [
+        "99,441"
+      ],
+      "expected_misses": [
+        "99441"
+      ],
+      "forbidden_hits": [],
+      "chart_filepath": null,
+      "tables_used": [
+        "olist_orders",
+        "olist_order_items",
+        "olist_order_payments"
+      ]
+    },
+    {
+      "id": "q08",
+      "input": "Which product category has the most orders?",
+      "tags": [
+        "multi-table",
+        "join"
+      ],
+      "answer": "The product category with the most orders is **Cama, Mesa e Banho** (Bedding, Tableware, and Bath), with a total of **11,115 orders**.",
+      "passed": true,
+      "expected_hits": [
+        "Cama",
+        "cama"
+      ],
+      "expected_misses": [
+        "cama_mesa_banho",
+        "bed_bath_table"
+      ],
+      "forbidden_hits": [],
+      "chart_filepath": null,
+      "tables_used": [
+        "olist_order_items",
+        "olist_products",
+        "olist_orders"
+      ]
+    },
+    {
+      "id": "q09",
+      "input": "What percentage of orders were delivered successfully?",
+      "tags": [
+        "single-table",
+        "calculation"
+      ],
+      "answer": "Out of a total of 99,441 orders, 96,478 were delivered successfully. \n\nTo calculate the percentage of successfully delivered orders:\n\n\\[\n\\text{Percentage} = \\left( \\frac{\\text{delivered orders}}{\\text{total orders}} \\right) \\times 100 = \\left( \\frac{96478}{99441} \\right) \\times 100 \\approx 97.5\\%\n\\]\n\nThus, approximately **97.5%** of orders were delivered successfully.",
+      "passed": true,
+      "expected_hits": [
+        "96",
+        "97"
+      ],
+      "expected_misses": [
+        "96.4",
+        "96.5",
+        "96.47"
+      ],
+      "forbidden_hits": [],
+      "chart_filepath": null,
+      "tables_used": [
+        "olist_orders",
+        "olist_order_items",
+        "olist_order_payments"
+      ]
+    },
+    {
+      "id": "q10",
+      "input": "Which state has the most orders?",
+      "tags": [
+        "multi-table",
+        "join"
+      ],
+      "answer": "The state with the most orders is S\u00e3o Paulo (SP), with a total of 41,746 orders.",
+      "passed": true,
+      "expected_hits": [
+        "SP"
+      ],
+      "expected_misses": [],
+      "forbidden_hits": [],
+      "chart_filepath": null,
+      "tables_used": [
+        "olist_orders",
+        "olist_customers",
+        "olist_order_items"
+      ]
+    },
+    {
+      "id": "q11",
+      "input": "What is the average delivery time in days?",
+      "tags": [
+        "single-table",
+        "calculation"
+      ],
+      "answer": "The average delivery time is approximately **12.13 days**.",
+      "passed": true,
+      "expected_hits": [
+        "12"
+      ],
+      "expected_misses": [
+        "12.0",
+        "12.09"
+      ],
+      "forbidden_hits": [],
+      "chart_filepath": null,
+      "tables_used": [
+        "olist_orders",
+        "olist_order_reviews",
+        "olist_order_items"
+      ]
+    },
+    {
+      "id": "q12",
+      "input": "Which seller has the most orders?",
+      "tags": [
+        "multi-table",
+        "join"
+      ],
+      "answer": "The seller with the most orders is identified by the seller ID **6560211a19b47992c3666cc44a7e94c0**, with a total of **2,033 orders**.",
+      "passed": true,
+      "expected_hits": [],
+      "expected_misses": [],
+      "forbidden_hits": [],
+      "chart_filepath": null,
+      "tables_used": [
+        "olist_sellers",
+        "olist_order_items",
+        "olist_orders"
+      ]
+    },
+    {
+      "id": "q13",
+      "input": "What is the most popular product category by revenue?",
+      "tags": [
+        "multi-table",
+        "join",
+        "aggregation"
+      ],
+      "answer": "The most popular product category by revenue is **Health & Beauty**, with a total revenue of **BRL 1,258,681.34**.",
+      "passed": true,
+      "expected_hits": [],
+      "expected_misses": [],
+      "forbidden_hits": [],
+      "chart_filepath": null,
+      "tables_used": [
+        "olist_order_items",
+        "olist_products",
+        "product_category_name_translation"
+      ]
+    },
+    {
+      "id": "q14",
+      "input": "How many orders were placed in 2017?",
+      "tags": [
+        "single-table",
+        "filter"
+      ],
+      "answer": "A total of **45,101 orders** were placed in 2017.",
+      "passed": true,
+      "expected_hits": [
+        "45,101"
+      ],
+      "expected_misses": [
+        "45101"
+      ],
+      "forbidden_hits": [],
+      "chart_filepath": null,
+      "tables_used": [
+        "olist_orders",
+        "olist_order_reviews",
+        "olist_order_items"
+      ]
+    },
+    {
+      "id": "q15",
+      "input": "What is the average number of installments for credit card payments?",
+      "tags": [
+        "single-table",
+        "filter",
+        "aggregation"
+      ],
+      "answer": "The average number of installments for credit card payments is approximately **3.51**.",
+      "passed": true,
+      "expected_hits": [
+        "3",
+        "5"
+      ],
+      "expected_misses": [
+        "4",
+        "6"
+      ],
+      "forbidden_hits": [],
+      "chart_filepath": null,
+      "tables_used": [
+        "olist_order_payments",
+        "olist_orders",
+        "olist_order_items"
+      ]
+    },
+    {
+      "id": "q16",
+      "input": "Which month in 2017 had the highest number of orders?",
+      "tags": [
+        "single-table",
+        "time-series"
+      ],
+      "answer": "The month in 2017 with the highest number of orders was November, with a total of 7,544 orders.",
+      "passed": true,
+      "expected_hits": [
+        "November",
+        "november"
+      ],
+      "expected_misses": [
+        "11"
+      ],
+      "forbidden_hits": [],
+      "chart_filepath": null,
+      "tables_used": [
+        "olist_orders",
+        "olist_order_items",
+        "olist_order_payments"
+      ]
+    },
+    {
+      "id": "q17",
+      "input": "What is the average freight value per order?",
+      "tags": [
+        "single-table",
+        "aggregation"
+      ],
+      "answer": "The average freight value per order is approximately **R$ 15.10**.",
+      "passed": true,
+      "expected_hits": [
+        "15",
+        "15.1",
+        "15.10"
+      ],
+      "expected_misses": [],
+      "forbidden_hits": [],
+      "chart_filepath": null,
+      "tables_used": [
+        "olist_order_items",
+        "olist_orders",
+        "olist_order_payments"
+      ]
+    },
+    {
+      "id": "q18",
+      "input": "How many orders have a review score of 5?",
+      "tags": [
+        "single-table",
+        "filter"
+      ],
+      "answer": "There are a total of **57,328 orders** that have a review score of 5.",
+      "passed": true,
+      "expected_hits": [
+        "57,328"
+      ],
+      "expected_misses": [
+        "57328"
+      ],
+      "forbidden_hits": [],
+      "chart_filepath": null,
+      "tables_used": [
+        "olist_order_reviews",
+        "olist_orders",
+        "olist_order_items"
+      ]
+    },
+    {
+      "id": "q19",
+      "input": "Which city has the most customers?",
+      "tags": [
+        "single-table",
+        "aggregation"
+      ],
+      "answer": "The city with the most customers is S\u00e3o Paulo, with a total of 15,540 customers.",
+      "passed": true,
+      "expected_hits": [
+        "S\u00e3o Paulo"
+      ],
+      "expected_misses": [
+        "sao paulo",
+        "SAO PAULO"
+      ],
+      "forbidden_hits": [],
+      "chart_filepath": null,
+      "tables_used": [
+        "olist_customers",
+        "olist_orders",
+        "olist_sellers"
+      ]
+    },
+    {
+      "id": "q20",
+      "input": "What is the total revenue in BRL?",
+      "tags": [
+        "multi-table",
+        "aggregation"
+      ],
+      "answer": "The total revenue is approximately **BRL 16,008,872.12**.",
+      "passed": true,
+      "expected_hits": [
+        "BRL"
+      ],
+      "expected_misses": [
+        "R$",
+        "reais"
+      ],
+      "forbidden_hits": [],
+      "chart_filepath": null,
+      "tables_used": [
+        "olist_order_payments",
+        "olist_order_items",
+        "olist_orders"
+      ]
+    },
+    {
+      "id": "q21",
+      "input": "What is the total revenue converted to USD?",
+      "tags": [
+        "currency",
+        "mcp-exchange-rate"
+      ],
+      "answer": "The total revenue converted to USD is approximately **$3,169,756.68**.",
+      "passed": true,
+      "expected_hits": [
+        "USD",
+        "$",
+        "3,"
+      ],
+      "expected_misses": [],
+      "forbidden_hits": [],
+      "chart_filepath": null,
+      "tables_used": [
+        "olist_order_payments",
+        "olist_order_items",
+        "olist_orders"
+      ]
+    },
+    {
+      "id": "q22",
+      "input": "Convert total 2017 revenue to EUR",
+      "tags": [
+        "currency",
+        "mcp-exchange-rate"
+      ],
+      "answer": "The total revenue for the year 2017 was approximately **1,230,724.49 EUR**. This conversion is based on the current exchange rate of 1 BRL = 0.17 EUR.",
+      "passed": true,
+      "expected_hits": [
+        "EUR"
+      ],
+      "expected_misses": [
+        "euro",
+        "\u20ac"
+      ],
+      "forbidden_hits": [],
+      "chart_filepath": null,
+      "tables_used": [
+        "olist_order_payments",
+        "olist_order_items",
+        "olist_orders"
+      ]
+    },
+    {
+      "id": "q23",
+      "input": "Which state has the most orders per capita?",
+      "tags": [
+        "per-capita",
+        "mcp-ibge"
+      ],
+      "answer": "To find the state with the most orders per capita, we can calculate the orders per capita for each state using the order counts and the populations obtained.\n\nHere are the order counts and populations for the states:\n\n| State | Order Count | Population | Orders per Capita |\n|-------|-------------|------------|--------------------|\n| SP    | 41,746      | 46,649,132 | 0.000894           |\n| RJ    | 12,852      | 17,463,349 | 0.000737           |\n| MG    | 11,635      | 21,411,923 | 0.000544           |\n| RS    | 5,466       | 11,466,630 | 0.000478           |\n| PR    | 5,045       | 11,597,484 | 0.000434           |\n| SC    | 3,637       | 7,338,473  | 0.000496           |\n| BA    | 3,380       | 14,985,284 | 0.000226           |\n| DF    | 2,140       | 3,094,325  | 0.000691           |\n| ES    | 2,033       | 4,108,508  | 0.000494           |\n| GO    | 2,020       | 7,206,589  | 0.000280           |\n\nCalculating the orders per capita, we find that:\n\n- **S\u00e3o Paulo (SP)** has the highest orders per capita at approximately **0.000894**.\n\nThus, **S\u00e3o Paulo (SP)** is the state with the most orders per capita.",
+      "passed": true,
+      "expected_hits": [
+        "SP",
+        "DF",
+        "RJ",
+        "MG",
+        "PR"
+      ],
+      "expected_misses": [],
+      "forbidden_hits": [],
+      "chart_filepath": null,
+      "tables_used": [
+        "olist_orders",
+        "olist_order_items",
+        "olist_customers"
+      ]
+    },
+    {
+      "id": "q24",
+      "input": "Show me the top 5 sellers by total revenue",
+      "tags": [
+        "multi-table",
+        "join",
+        "top-n"
+      ],
+      "answer": "The top 5 sellers by total revenue are as follows:\n\n1. **Seller ID:** 7c67e1448b00f6e969d365cea6b010ab - **Total Revenue:** BRL 507,166.91\n2. **Seller ID:** 1025f0e2d44d7041d6cf58b6550e0bfa - **Total Revenue:** BRL 308,222.04\n3. **Seller ID:** 4a3ca9315b744ce9f8e9374361493884 - **Total Revenue:** BRL 301,245.27\n4. **Seller ID:** 1f50f920176fa81dab994f9023523100 - **Total Revenue:** BRL 290,253.42\n5. **Seller ID:** 53243585a1d6dc2643021fd1853d8905 - **Total Revenue:** BRL 284,903.08\n\nIf you need further analysis or a chart, let me know!",
+      "passed": true,
+      "expected_hits": [],
+      "expected_misses": [],
+      "forbidden_hits": [],
+      "chart_filepath": null,
+      "tables_used": [
+        "olist_order_payments",
+        "olist_sellers",
+        "olist_order_items"
+      ]
+    },
+    {
+      "id": "q25",
+      "input": "What is the average order value in USD?",
+      "tags": [
+        "currency",
+        "mcp-exchange-rate"
+      ],
+      "answer": "The average order value is approximately **$30.51 USD**.",
+      "passed": true,
+      "expected_hits": [
+        "USD",
+        "$",
+        "30"
+      ],
+      "expected_misses": [
+        "31",
+        "32",
+        "33",
+        "34",
+        "35"
+      ],
+      "forbidden_hits": [],
+      "chart_filepath": null,
+      "tables_used": [
+        "olist_order_items",
+        "olist_orders",
+        "olist_order_payments"
+      ]
+    }
+  ]
+}
