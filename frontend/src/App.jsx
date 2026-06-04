@@ -173,7 +173,7 @@ export default function App() {
                         <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
                       </svg>
                       <span style={{ fontSize: 12, color: activeSessionId === sid ? '#2563eb' : '#374151', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', fontWeight: activeSessionId === sid ? 500 : 400 }}>
-                        Chat {i + 1}
+                        Chat {sessions.length - i}
                       </span>
                     </div>
                     <button onClick={(e) => handleDeleteSession(sid, e)}
