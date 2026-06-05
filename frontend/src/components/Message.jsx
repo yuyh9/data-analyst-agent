@@ -22,6 +22,7 @@ export default function Message({ message }) {
           {isUser ? 'User' : 'AI'}
         </div>
 
+        {/* message bubble */}
         <div style={{
           padding: '10px 14px',
           borderRadius: isUser ? '16px 4px 16px 16px' : '4px 16px 16px 16px',
@@ -55,7 +56,7 @@ export default function Message({ message }) {
                 tr: ({ children }) => <tr>{children}</tr>,
               }}
             >
-              {message.content}
+              {message.content.replace(/!\[.*?\]\(.*?\)/g, '').trim()}
             </ReactMarkdown>
           )}
         </div>
@@ -63,21 +64,14 @@ export default function Message({ message }) {
         {/* chart */}
         {message.chartUrl && <ChartDisplay chartUrl={message.chartUrl} />}
 
-        {/* report download — forces download via /download/report/ endpoint */}
+        {/* report download button */}
         {message.reportUrl && (
           <a
             href={`http://localhost:8000/download/report/${message.reportUrl.split('/').pop()}`}
             download
-            style={{
-              display: 'inline-flex', alignItems: 'center', gap: 6,
-              padding: '7px 14px', background: '#fff',
-              border: '1.5px solid #2563eb', borderRadius: 8,
-              fontSize: 13, color: '#2563eb', fontWeight: 500,
-              textDecoration: 'none', transition: 'all 0.15s'
-            }}
+            style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '7px 14px', background: '#fff', border: '1.5px solid #2563eb', borderRadius: 8, fontSize: 13, color: '#2563eb', fontWeight: 500, textDecoration: 'none', transition: 'all 0.15s' }}
             onMouseEnter={e => e.currentTarget.style.background = '#eff6ff'}
-            onMouseLeave={e => e.currentTarget.style.background = '#fff'}
-          >
+            onMouseLeave={e => e.currentTarget.style.background = '#fff'}>
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
               <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
               <polyline points="7 10 12 15 17 10"/>
@@ -85,6 +79,35 @@ export default function Message({ message }) {
             </svg>
             Download report ({message.reportUrl.endsWith('.pdf') ? 'PDF' : 'Word'})
           </a>
+        )}
+
+        {/* SQL ReAct trace — collapsible */}
+        {message.sqlQueries && message.sqlQueries.length > 0 && (
+          <details style={{ width: '100%', maxWidth: 600 }}>
+            <summary style={{
+              fontSize: 11, color: '#9ca3af', cursor: 'pointer',
+              userSelect: 'none', display: 'flex', alignItems: 'center',
+              gap: 6, paddingLeft: 2, listStyle: 'none', outline: 'none'
+            }}>
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/>
+              </svg>
+              View SQL ({message.sqlQueries.length} {message.sqlQueries.length === 1 ? 'query' : 'queries'})
+            </summary>
+            {message.sqlQueries.map((sql, i) => (
+              <pre key={i} style={{
+                marginTop: 6, padding: '10px 14px',
+                background: '#1e1e2e', color: '#cdd6f4',
+                borderRadius: 10, fontSize: 11,
+                overflowX: 'auto', lineHeight: 1.7,
+                fontFamily: "'JetBrains Mono', 'Fira Code', monospace",
+                whiteSpace: 'pre-wrap', wordBreak: 'break-word',
+                border: '1px solid #313244'
+              }}>
+                {sql}
+              </pre>
+            ))}
+          </details>
         )}
 
         {/* tables used */}

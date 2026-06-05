@@ -20,6 +20,7 @@ class ChatResponse(BaseModel):
     chart_url: Optional[str] = None
     report_url: Optional[str] = None
     tables_used: list[str] = []
+    sql_queries: list[str] = []
 
 
 # endpoints
@@ -47,5 +48,6 @@ def chat_endpoint(req: ChatRequest):
         session_id=session_id,
         chart_url=chart_url,
         report_url=report_url,
-        tables_used=result.get("tables_used", [])
+        tables_used=result.get("tables_used", []),
+        sql_queries=result.get("sql_queries", [])
     )

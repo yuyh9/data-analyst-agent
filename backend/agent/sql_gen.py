@@ -4,6 +4,7 @@ import psycopg2
 import psycopg2.extras
 from dotenv import load_dotenv
 from openai import OpenAI
+from agent.schema_rag import normalize_category_names
 
 load_dotenv()
 
@@ -51,7 +52,7 @@ def validate_result(rows: list[dict], query: str) -> dict:
                 except (TypeError, ValueError):
                     pass
 
-            # review scores should be 1-5
+            # review scores should be 0-5
             if "review_score" in col_lower or "score" in col_lower:
                 try:
                     num = float(val)
@@ -91,7 +92,8 @@ Available table schemas:
 Rules:
 - Only write SELECT statements
 - Use exact table and column names from the schemas above
-- For category names, JOIN with product_category_name_translation to get English names
+- For category names always use the English underscore format from product_category_name_translation e.g. health_beauty, watches_gifts, bed_bath_table
+- For date/year filters always JOIN with olist_orders and use order_purchase_timestamp
 - Olist data covers September 2016 to October 2018
 - Always use LIMIT 50 unless the user asks for all data
 - Return only the SQL query, nothing else
@@ -117,7 +119,6 @@ Rules:
             model="gpt-4o-mini",
             messages=messages,
             temperature=0,
-            seed=42,
             timeout=60
         )
         sql = response.choices[0].message.content.strip()
@@ -128,6 +129,10 @@ Rules:
             if sql.startswith("sql"):
                 sql = sql[3:]
             sql = sql.strip()
+
+        # normalize category display names to database format
+        # e.g. 'Health & Beauty' → 'health_beauty'
+        sql = normalize_category_names(sql)
 
         # try to execute
         try:

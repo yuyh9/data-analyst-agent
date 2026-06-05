@@ -7,6 +7,7 @@ from agent.sql_gen import generate_and_validate_sql
 from agent.chart_gen import generate_chart
 from agent.memory import memory_store
 from agent.mcp_client import mcp_client
+from agent.prompts import SYSTEM_PROMPT
 
 load_dotenv()
 
@@ -81,24 +82,9 @@ TOOLS = [
     }
 ]
 
-SYSTEM_PROMPT = """You are a data analyst assistant. You help users explore and understand their data through SQL queries, charts, and reports.
-
-Your capabilities:
-- Query any database table using natural language
-- Convert currencies using live exchange rates
-- Generate charts to visualize data
-- Export analysis as Word (.docx) or PDF reports
-
-Guidelines:
-- Always query the database first before generating a chart
-- For currency questions, query first then convert the total
-- Be concise and specific — include key numbers in your response
-- If the user asks to export, save, or download a report, use export_report
-- When exporting, include the full analysis content in the report
-"""
-
 
 def handle_tool_call(tool_name: str, tool_args: dict, session_id: str) -> str:
+    """Execute a tool call and return the result as a JSON string."""
     session = memory_store.get_or_create(session_id)
 
     if tool_name == "query_database":
@@ -150,6 +136,10 @@ def handle_tool_call(tool_name: str, tool_args: dict, session_id: str) -> str:
 
 
 def chat(user_message: str, session_id: str = "default") -> dict:
+    """
+    Main entry point. Takes a user message, returns
+    answer text + optional chart filepath + SQL queries.
+    """
     session = memory_store.get_or_create(session_id)
     session.add_user_message(user_message)
 
@@ -159,14 +149,15 @@ def chat(user_message: str, session_id: str = "default") -> dict:
     chart_filepath = None
     report_filepath = None
     final_text = ""
+    sql_queries = []
 
+    # agentic loop
     for _ in range(10):
         response = client.chat.completions.create(
             model="gpt-4o-mini",
             messages=messages,
             tools=TOOLS,
             tool_choice="auto",
-            seed=42,
             temperature=0
         )
         message = response.choices[0].message
@@ -189,6 +180,8 @@ def chat(user_message: str, session_id: str = "default") -> dict:
                         chart_filepath = result_data["filepath"]
                     elif tool_name == "export_report":
                         report_filepath = result_data["filepath"]
+                if "sql" in result_data:
+                    sql_queries.append(result_data["sql"])
             except Exception:
                 pass
 
@@ -198,7 +191,25 @@ def chat(user_message: str, session_id: str = "default") -> dict:
                 "content": result
             })
 
-    session.add_assistant_message(final_text)
+    # build chart and report URLs
+    chart_url = None
+    if chart_filepath:
+        from pathlib import Path
+        chart_url = f"/charts/{Path(chart_filepath).name}"
+
+    report_url = None
+    if report_filepath:
+        from pathlib import Path
+        report_url = f"/reports/{Path(report_filepath).name}"
+
+    # save full message with metadata to memory
+    session.add_assistant_message(
+        content=final_text,
+        chart_url=chart_url,
+        report_url=report_url,
+        sql_queries=sql_queries,
+        tables_used=session.last_tables_used
+    )
     memory_store.save(session_id)
 
     return {
@@ -206,11 +217,13 @@ def chat(user_message: str, session_id: str = "default") -> dict:
         "chart_filepath": chart_filepath,
         "report_filepath": report_filepath,
         "session_id": session_id,
-        "tables_used": session.last_tables_used
+        "tables_used": session.last_tables_used,
+        "sql_queries": sql_queries
     }
 
 
 def initialize():
+    """Call once at app startup to build schema index."""
     print("Building schema index...")
     build_schema_index()
     print("Agent ready.")

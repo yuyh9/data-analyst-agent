@@ -1,12 +1,14 @@
 import { useState } from 'react'
 
 const SUGGESTIONS = [
+  'How many unique customers are in the database?',
+  'What is the average review score?',
   'Which product category has the most orders?',
-  'Top 5 states by number of orders as a bar chart',
-  'Total revenue converted to USD',
-  'Average review score?',
-  'Which state has the most orders per capita?',
-  'Monthly order count for 2017 as a line chart',
+  'Show me top 5 sellers by total revenue as a bar chart',
+  'What is the total revenue converted to USD?',
+  'Convert total 2017 revenue to EUR"',
+  'Show me top 5 categories by revenue',
+  'Now show that as a pie chart',
 ]
 
 export default function ChatInput({ onSend, loading }) {

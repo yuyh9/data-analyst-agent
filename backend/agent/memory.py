@@ -10,28 +10,60 @@ load_dotenv()
 
 
 # models
-
 @dataclass
 class Message:
     role: str
     content: str
+    chart_url: Optional[str] = None
+    report_url: Optional[str] = None
+    sql_queries: list = field(default_factory=list)
+    tables_used: list = field(default_factory=list)
 
 @dataclass
 class SessionMemory:
     session_id: str
-    messages: list[Message] = field(default_factory=list)
+    messages: list = field(default_factory=list)
     preferred_chart_type: Optional[str] = None
-    last_tables_used: list[str] = field(default_factory=list)
+    last_tables_used: list = field(default_factory=list)
 
     def add_user_message(self, content: str):
         self.messages.append(Message(role="user", content=content))
 
-    def add_assistant_message(self, content: str):
-        self.messages.append(Message(role="assistant", content=content))
+    def add_assistant_message(
+        self,
+        content: str,
+        chart_url: Optional[str] = None,
+        report_url: Optional[str] = None,
+        sql_queries: list = None,
+        tables_used: list = None
+    ):
+        self.messages.append(Message(
+            role="assistant",
+            content=content,
+            chart_url=chart_url,
+            report_url=report_url,
+            sql_queries=sql_queries or [],
+            tables_used=tables_used or []
+        ))
 
     def to_openai_format(self) -> list[dict]:
+        """Convert to OpenAI messages format — text only."""
         return [
             {"role": m.role, "content": m.content}
+            for m in self.messages
+        ]
+
+    def to_full_format(self) -> list[dict]:
+        """Convert to full format including chart/report URLs."""
+        return [
+            {
+                "role": m.role,
+                "content": m.content,
+                "chart_url": m.chart_url,
+                "report_url": m.report_url,
+                "sql_queries": m.sql_queries,
+                "tables_used": m.tables_used
+            }
             for m in self.messages
         ]
 
@@ -44,8 +76,7 @@ class SessionMemory:
         self.last_tables_used = []
 
 
-# database
-
+# database helpers
 def get_pg_conn():
     return psycopg2.connect(
         host=os.getenv("PG_HOST"),
@@ -57,12 +88,10 @@ def get_pg_conn():
 
 
 # store
-
 class MemoryStore:
     """
     Persistent session memory backed by PostgreSQL.
-    Each session is a row in chat_sessions table.
-    Falls back to in-memory if DB is unavailable.
+    Stores full message metadata including chart/report URLs.
     """
 
     def __init__(self):
@@ -84,13 +113,21 @@ class MemoryStore:
                 return None
 
             session = SessionMemory(session_id=session_id)
+
             raw_messages = row["messages"]
             if isinstance(raw_messages, str):
                 raw_messages = json.loads(raw_messages)
-            session.messages = [
-                Message(role=m["role"], content=m["content"])
-                for m in raw_messages
-            ]
+
+            for m in raw_messages:
+                session.messages.append(Message(
+                    role=m["role"],
+                    content=m["content"],
+                    chart_url=m.get("chart_url"),
+                    report_url=m.get("report_url"),
+                    sql_queries=m.get("sql_queries", []),
+                    tables_used=m.get("tables_used", [])
+                ))
+
             session.preferred_chart_type = row["preferred_chart_type"]
             raw_tables = row["last_tables_used"]
             if isinstance(raw_tables, str):
@@ -106,10 +143,10 @@ class MemoryStore:
         try:
             conn = get_pg_conn()
             cursor = conn.cursor()
-            messages_json = json.dumps([
-                {"role": m.role, "content": m.content}
-                for m in session.messages
-            ])
+
+            # save full message format including chart/report URLs
+            messages_json = json.dumps(session.to_full_format())
+
             cursor.execute("""
                 INSERT INTO chat_sessions
                     (session_id, messages, preferred_chart_type, last_tables_used, updated_at)
@@ -132,20 +169,15 @@ class MemoryStore:
             print(f"Memory save error: {e}")
 
     def get_or_create(self, session_id: str) -> SessionMemory:
-        # check in-memory cache first
         if session_id in self._cache:
             return self._cache[session_id]
-
-        # try loading from PostgreSQL
         session = self._load_from_db(session_id)
         if session is None:
             session = SessionMemory(session_id=session_id)
-
         self._cache[session_id] = session
         return session
 
     def save(self, session_id: str):
-        """Call this after each turn to persist to PostgreSQL."""
         if session_id in self._cache:
             self._save_to_db(self._cache[session_id])
 

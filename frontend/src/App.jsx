@@ -30,7 +30,11 @@ export default function App() {
       const data = await res.json()
       const msgs = (data.messages || []).map(m => ({
         role: m.role,
-        content: m.content
+        content: m.content,
+        chartUrl: m.chart_url || null,
+        reportUrl: m.report_url || null,
+        sqlQueries: m.sql_queries || [],
+        tablesUsed: m.tables_used || []
       }))
       setMessages(msgs)
     } catch {}
@@ -69,14 +73,16 @@ export default function App() {
       if (!sessionId) {
         setSessionId(data.session_id)
         setActiveSessionId(data.session_id)
-        fetchSessions()
       }
+      // refresh sessions after every message
+      fetchSessions()
       setMessages((prev) => [...prev, {
         role: 'assistant',
         content: data.answer,
         chartUrl: data.chart_url,
         reportUrl: data.report_url,
-        tablesUsed: data.tables_used
+        tablesUsed: data.tables_used,
+        sqlQueries: data.sql_queries || []
       }])
     } catch {
       setError('Something went wrong. Is the backend running?')
@@ -109,7 +115,6 @@ export default function App() {
       {sidebarOpen && (
         <aside style={{ width: 260, background: '#fff', borderRight: '1px solid #e8eaed', display: 'flex', flexDirection: 'column', flexShrink: 0, overflow: 'hidden' }}>
 
-          {/* logo + buttons */}
           <div style={{ padding: '20px 16px 16px', borderBottom: '1px solid #f1f3f4' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 16 }}>
               <div style={{ width: 32, height: 32, background: '#2563eb', borderRadius: 9, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
@@ -123,51 +128,39 @@ export default function App() {
               </div>
             </div>
 
-            <button
-              onClick={handleNewChat}
+            <button onClick={handleNewChat}
               style={{ width: '100%', padding: '9px 14px', background: '#2563eb', color: '#fff', border: 'none', borderRadius: 9, fontSize: 13, fontWeight: 500, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6 }}
               onMouseEnter={e => e.currentTarget.style.background = '#1d4ed8'}
-              onMouseLeave={e => e.currentTarget.style.background = '#2563eb'}
-            >
+              onMouseLeave={e => e.currentTarget.style.background = '#2563eb'}>
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
                 <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
               </svg>
               New chat
             </button>
 
-            <button
-              onClick={() => fileInputRef.current?.click()}
-              disabled={uploading}
+            <button onClick={() => fileInputRef.current?.click()} disabled={uploading}
               style={{ width: '100%', marginTop: 8, padding: '8px 14px', background: 'none', color: '#6b7280', border: '1px solid #e5e7eb', borderRadius: 9, fontSize: 13, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6 }}
               onMouseEnter={e => { e.currentTarget.style.borderColor = '#2563eb'; e.currentTarget.style.color = '#2563eb' }}
-              onMouseLeave={e => { e.currentTarget.style.borderColor = '#e5e7eb'; e.currentTarget.style.color = '#6b7280' }}
-            >
+              onMouseLeave={e => { e.currentTarget.style.borderColor = '#e5e7eb'; e.currentTarget.style.color = '#6b7280' }}>
               <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-                <polyline points="17 8 12 3 7 8"/>
-                <line x1="12" y1="3" x2="12" y2="15"/>
+                <polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/>
               </svg>
               {uploading ? 'Uploading…' : 'Upload CSV'}
             </button>
             <input ref={fileInputRef} type="file" accept=".csv" onChange={handleUpload} style={{ display: 'none' }}/>
           </div>
 
-          {/* chat history */}
           <div style={{ flex: 1, overflowY: 'auto', padding: '12px 8px' }}>
             {sessions.length > 0 ? (
               <>
                 <div style={{ fontSize: 10, color: '#9ca3af', marginBottom: 6, padding: '0 8px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.08em' }}>Recent chats</div>
                 {sessions.slice(0, 20).map((sid, i) => (
                   <div key={sid}
-                    onClick={() => {
-                      setSessionId(sid)
-                      setActiveSessionId(sid)
-                      loadSessionMessages(sid)
-                    }}
+                    onClick={() => { setSessionId(sid); setActiveSessionId(sid); loadSessionMessages(sid) }}
                     style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '8px 10px', borderRadius: 8, cursor: 'pointer', marginBottom: 2, background: activeSessionId === sid ? '#eff6ff' : 'transparent', transition: 'background 0.1s', gap: 8 }}
                     onMouseEnter={e => { if (activeSessionId !== sid) e.currentTarget.style.background = '#f9fafb' }}
-                    onMouseLeave={e => { if (activeSessionId !== sid) e.currentTarget.style.background = 'transparent' }}
-                  >
+                    onMouseLeave={e => { if (activeSessionId !== sid) e.currentTarget.style.background = 'transparent' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 8, minWidth: 0 }}>
                       <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke={activeSessionId === sid ? '#2563eb' : '#9ca3af'} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0 }}>
                         <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
@@ -194,7 +187,6 @@ export default function App() {
         </aside>
       )}
 
-      {/* main */}
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', minWidth: 0 }}>
         <header style={{ background: '#fff', borderBottom: '1px solid #e5e7eb', padding: '0 20px', height: 54, display: 'flex', alignItems: 'center', gap: 14, flexShrink: 0, boxShadow: '0 1px 3px rgba(0,0,0,0.04)' }}>
           <button onClick={() => setSidebarOpen(v => !v)}
@@ -214,6 +206,7 @@ export default function App() {
             <span style={{ fontSize: 15, fontWeight: 600, color: '#111827' }}>Data Analyst Agent</span>
           </div>
           <div style={{ height: 16, width: 1, background: '#e5e7eb' }}/>
+          <span style={{ fontSize: 12, color: '#9ca3af' }}>Olist e-commerce · 8 tables · RAG · MCP</span>
           {loading && (
             <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: 6, fontSize: 12, color: '#2563eb', background: '#eff6ff', padding: '4px 10px', borderRadius: 20 }}>
               <svg style={{ animation: 'spin 1s linear infinite', width: 12, height: 12 }} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">

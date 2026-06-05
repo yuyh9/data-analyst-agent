@@ -27,9 +27,14 @@ def md_to_reportlab(text: str) -> str:
     return safe
 
 
+def extract_image_paths(content: str) -> list:
+    """Extract image paths from markdown image syntax."""
+    return re.findall(r'!\[.*?\]\((.*?)\)', content)
+
+
 def generate_docx(title: str, content: str, filename: str) -> str:
     from docx import Document
-    from docx.shared import Pt, RGBColor
+    from docx.shared import Pt, RGBColor, Inches
     from docx.enum.text import WD_ALIGN_PARAGRAPH
 
     doc = Document()
@@ -51,7 +56,21 @@ def generate_docx(title: str, content: str, filename: str) -> str:
         if not line:
             doc.add_paragraph()
             continue
-        if line.startswith('### '):
+
+        # handle markdown image — embed actual image
+        img_match = re.match(r'^!\[.*?\]\((.*?)\)', line)
+        if img_match:
+            img_path = img_match.group(1)
+            if os.path.exists(img_path):
+                try:
+                    doc.add_picture(img_path, width=Inches(5.5))
+                except Exception:
+                    pass
+            continue
+
+        if line.startswith('#### '):
+            doc.add_heading(clean_markdown(line[5:]), level=3)
+        elif line.startswith('### '):
             doc.add_heading(clean_markdown(line[4:]), level=3)
         elif line.startswith('## '):
             doc.add_heading(clean_markdown(line[3:]), level=2)
@@ -63,7 +82,6 @@ def generate_docx(title: str, content: str, filename: str) -> str:
             doc.add_paragraph(clean_markdown(re.sub(r'^\d+\.\s', '', line)), style='List Number')
         else:
             p = doc.add_paragraph()
-            # handle inline bold
             parts = re.split(r'\*\*(.*?)\*\*', line)
             for i, part in enumerate(parts):
                 run = p.add_run(part)
@@ -78,10 +96,10 @@ def generate_docx(title: str, content: str, filename: str) -> str:
 def generate_pdf(title: str, content: str, filename: str) -> str:
     from reportlab.lib.pagesizes import A4
     from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
-    from reportlab.lib.units import cm
+    from reportlab.lib.units import cm, inch
     from reportlab.lib import colors
-    from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, ListFlowable, ListItem
-    from reportlab.lib.enums import TA_CENTER, TA_LEFT
+    from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Image
+    from reportlab.lib.enums import TA_CENTER
 
     filepath = OUTPUT_DIR / f"{filename}.pdf"
     doc = SimpleDocTemplate(
@@ -120,10 +138,28 @@ def generate_pdf(title: str, content: str, filename: str) -> str:
         if not line:
             story.append(Spacer(1, 6))
             continue
-        if line.startswith('## '):
-            story.append(Paragraph(clean_markdown(line[3:]), h2_style))
+
+        # handle markdown image — embed actual PNG
+        img_match = re.match(r'^!\[.*?\]\((.*?)\)', line)
+        if img_match:
+            img_path = img_match.group(1)
+            if os.path.exists(img_path):
+                try:
+                    # max width = page width minus margins
+                    img = Image(img_path, width=14*cm, height=8*cm)
+                    story.append(Spacer(1, 8))
+                    story.append(img)
+                    story.append(Spacer(1, 8))
+                except Exception:
+                    pass
+            continue
+
+        if line.startswith('#### '):
+            story.append(Paragraph(clean_markdown(line[5:]), h3_style))
         elif line.startswith('### '):
             story.append(Paragraph(clean_markdown(line[4:]), h3_style))
+        elif line.startswith('## '):
+            story.append(Paragraph(clean_markdown(line[3:]), h2_style))
         elif line.startswith('- ') or line.startswith('* '):
             story.append(Paragraph(f"• {md_to_reportlab(line[2:])}", bullet_style))
         elif re.match(r'^\d+\.\s', line):
@@ -147,7 +183,7 @@ async def list_tools() -> list[Tool]:
                 "type": "object",
                 "properties": {
                     "title": {"type": "string", "description": "Report title"},
-                    "content": {"type": "string", "description": "Full report content in markdown format"},
+                    "content": {"type": "string", "description": "Full report content in markdown format. Include actual data numbers. Use ![alt](filepath) syntax to embed charts."},
                     "format": {"type": "string", "enum": ["docx", "pdf"], "description": "Output format: docx or pdf"}
                 },
                 "required": ["title", "content", "format"]
